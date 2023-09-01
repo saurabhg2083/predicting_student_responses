@@ -60,9 +60,12 @@ with tab2:
            'Hour of Time',
            ('00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17',
             '18', '19', '20', '21', '22', '23', '24'))
-
+       if passagetype == 'Worksheet':
+            passagetype = 'worksheet'
+       else:
+           passagetype = 'mocktest'
        #prompt = st.text_input('Prompt')
-       prompt = passagetype + ' ' + passage + ' ' + grade + ' ' + hour
+       prompt = 'Source:'+passagetype + ' Passage Name: ' + passage + ' Student Grade: ' + grade + ' Hour of exam: ' + hour
        url = 'http://chattinc.com/dicey/part1'
 
        data = {"text": f"{prompt}"}
