@@ -7,6 +7,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+
 st.title('Dicey Tech - Predicting Student Responses')
 
 tab1, tab2, tab3 = st.tabs(["ABOUT THE PROJECT", "PART 1", "PART 2"])
@@ -47,37 +48,107 @@ with tab2:
    st.header("PART 1")
    with st.form("my_form"):
        st.write("Write your prompt")
+       passagelist = list()
        passagetype = st.radio(
            "Please select",
-           ["Worksheet", "Mockup Test"])
+           ["Worksheet", "Mockup Test"], key="ptype")
+
+       if passagetype == 'Worksheet':
+            passagetype = 'worksheet'
+
+       if passagetype == 'mocktest':
+           passagetype = 'mocktest'
+
        passage = st.selectbox(
            'Select passage',
-           ('PassageName','bluebird','dorian gray','jane eyre','notre-dame','metamorphosis','sleepy hollow','the hobbit','those winter','1984','anne','alice','baskervilles','black beauty','brazilian','charlottes','court life','DORIAN','dreams of a giant life','economics','fauntleroy','frankenstein','friendship','frost','gatsby','gibson','growth','gulliver','homing pigeon','honeybees','huck','i have a dream','jabberwocky','JANE EYRE','jekyll','lion','little women','lochinvar','lost treasure','magic city','marathon','matilda','meg','no enemies','nothing gold','NOTRE DAME','oliver twist -master','oliver twist -room','sense','patagonia','peter','rebecca','sea fever','secret garden','shiba','snowy river','sonnet 18','stopping by','this is going to hurt','THOSE WINTER','tom sawyer','treasure island','tyger','umami','van','voyage','war of the worlds','when u r old','wind in the willows','wizard','lost_in_the_woods','northern_lights','pollyanna'))
+           ('bluebird', 'dorian gray', 'jane eyre', 'notre-dame', 'metamorphosis', 'sleepy hollow', 'the hobbit',
+            'those winter', '1984', 'anne', 'alice', 'baskervilles', 'black beauty', 'brazilian', 'charlottes',
+            'court life', 'DORIAN', 'dreams of a giant life', 'economics', 'fauntleroy', 'frankenstein',
+            'friendship', 'frost', 'gatsby', 'gibson', 'growth', 'gulliver', 'homing pigeon', 'honeybees', 'huck',
+            'i have a dream', 'jabberwocky', 'JANE EYRE', 'jekyll', 'lion', 'little women', 'lochinvar',
+            'lost treasure', 'magic city', 'marathon', 'matilda', 'meg', 'no enemies', 'nothing gold',
+            'NOTRE DAME', 'oliver twist -master', 'oliver twist -room', 'sense', 'patagonia', 'peter', 'rebecca',
+            'sea fever', 'secret garden', 'shiba', 'snowy river', 'sonnet 18', 'stopping by',
+            'this is going to hurt', 'THOSE WINTER', 'tom sawyer', 'treasure island', 'tyger', 'umami', 'van',
+            'voyage', 'war of the worlds', 'when u r old', 'wind in the willows', 'wizard', 'lost_in_the_woods',
+            'northern_lights', 'pollyanna'))
+
+       question = st.text_input('Enter the Question')
+
        grade = st.selectbox(
            'Student Grade',
-           ('2', '3', '4', '5', '6', '7', '8', '9', '10'))
+           ('3', '4', '5', '6'))
        hour = st.selectbox(
            'Hour of Time',
            ('00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17',
             '18', '19', '20', '21', '22', '23', '24'))
-       if passagetype == 'Worksheet':
-            passagetype = 'worksheet'
-       else:
-           passagetype = 'mocktest'
+
        #prompt = st.text_input('Prompt')
-       prompt = 'Source:'+passagetype + ' Passage Name: ' + passage + ' Student Grade: ' + grade + ' Hour of exam: ' + hour
+       prompt = 'Source:'+passagetype + ' Passage Name: ' + passage + ' Student Grade: ' + grade + 'Question: '+question + 'Hour of exam: ' + hour
        url = 'http://chattinc.com/dicey/part1'
 
        data = {"text": f"{prompt}"}
        response = requests.post(url, json=data)
+       jsonData = response.json()
 
        # Every form must have a submit button.
        submitted = st.form_submit_button("Submit")
        if submitted:
-           st.write("prompt", response.json())
+           if jsonData['Prediction'] == 1:
+               st.write("Will respond well")
+           else:
+               st.write("Will fail")
+
 
 
 
 with tab3:
    st.header("PART 2")
-   st.write("Under Process")
+   with st.form("my_form1"):
+       st.write("Write your prompt")
+       passagetype2 = st.radio(
+           "Please select",
+           ["Worksheet", "Mockup Test"])
+
+       if passagetype2 == 'Worksheet':
+           ptype2 = 'worksheet'
+
+       if passagetype2 == 'mocktest':
+           ptype2 = 'mocktest'
+
+       passage2= st.selectbox(
+           'Select passage',
+           ('bluebird', 'dorian gray', 'jane eyre', 'notre-dame', 'metamorphosis', 'sleepy hollow', 'the hobbit',
+            'those winter', '1984', 'anne', 'alice', 'baskervilles', 'black beauty', 'brazilian', 'charlottes',
+            'court life', 'DORIAN', 'dreams of a giant life', 'economics', 'fauntleroy', 'frankenstein',
+            'friendship', 'frost', 'gatsby', 'gibson', 'growth', 'gulliver', 'homing pigeon', 'honeybees', 'huck',
+            'i have a dream', 'jabberwocky', 'JANE EYRE', 'jekyll', 'lion', 'little women', 'lochinvar',
+            'lost treasure', 'magic city', 'marathon', 'matilda', 'meg', 'no enemies', 'nothing gold',
+            'NOTRE DAME', 'oliver twist -master', 'oliver twist -room', 'sense', 'patagonia', 'peter', 'rebecca',
+            'sea fever', 'secret garden', 'shiba', 'snowy river', 'sonnet 18', 'stopping by',
+            'this is going to hurt', 'THOSE WINTER', 'tom sawyer', 'treasure island', 'tyger', 'umami', 'van',
+            'voyage', 'war of the worlds', 'when u r old', 'wind in the willows', 'wizard', 'lost_in_the_woods',
+            'northern_lights', 'pollyanna'))
+
+       question2 = st.text_input('Enter the Question')
+
+       grade2 = st.selectbox(
+           'Student Grade',
+           ('3', '4', '5', '6'))
+       hour2 = st.selectbox(
+           'Hour of Time',
+           ('00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17',
+            '18', '19', '20', '21', '22', '23', '24'))
+
+       # prompt = st.text_input('Prompt')
+       prompt2 = 'Source:' + ptype2 + ' Passage Name: ' + passage2 + ' Student Grade: ' + grade2 + 'Question: ' + question2 + 'Hour of exam: ' + hour2
+       url = 'http://chattinc.com/dicey/part2'
+
+       data = {"text": f"{prompt}"}
+       response = requests.post(url, json=data)
+       jsonData = response.json()
+
+       # Every form must have a submit button.
+       submitted2 = st.form_submit_button("Submit")
+       if submitted2:
+               st.write("Expected answer from student:",jsonData)
